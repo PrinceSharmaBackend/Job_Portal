@@ -1,0 +1,338 @@
+{
+  "info": {
+    "name": "Job Portal Management System API",
+    "description": "Complete API collection for Job Portal — Django REST Framework + JWT",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "BASE_URL", "value": "http://127.0.0.1:8000/api/v1"},
+    {"key": "ACCESS_TOKEN", "value": ""},
+    {"key": "REFRESH_TOKEN", "value": ""}
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register (Job Seeker)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{BASE_URL}}/auth/register/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"seeker@example.com\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"role\": \"job_seeker\",\n  \"phone\": \"9876543210\",\n  \"password\": \"StrongPass@123\",\n  \"confirm_password\": \"StrongPass@123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register (Employer)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{BASE_URL}}/auth/register/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"employer@example.com\",\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Corp\",\n  \"role\": \"employer\",\n  \"password\": \"StrongPass@123\",\n  \"confirm_password\": \"StrongPass@123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "pm.collectionVariables.set('ACCESS_TOKEN', data.access);",
+                  "pm.collectionVariables.set('REFRESH_TOKEN', data.refresh);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{BASE_URL}}/auth/login/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"seeker@example.com\",\n  \"password\": \"StrongPass@123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": "{{BASE_URL}}/auth/token/refresh/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{REFRESH_TOKEN}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/auth/logout/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{REFRESH_TOKEN}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/auth/me/"
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/auth/me/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Updated\",\n  \"phone\": \"9999999999\",\n  \"profile\": {\n    \"bio\": \"Experienced backend developer\",\n    \"location\": \"Mumbai, India\",\n    \"skills\": \"Python, Django, PostgreSQL\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/auth/change-password/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"old_password\": \"StrongPass@123\",\n  \"new_password\": \"NewPass@456\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jobs (Public)",
+      "item": [
+        {
+          "name": "List All Active Jobs",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/jobs/"
+          }
+        },
+        {
+          "name": "Search Jobs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/jobs/?search=python",
+              "query": [{"key": "search", "value": "python"}]
+            }
+          }
+        },
+        {
+          "name": "Filter Jobs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/jobs/?job_type=remote&experience_level=entry&is_remote=true",
+              "query": [
+                {"key": "job_type", "value": "remote"},
+                {"key": "experience_level", "value": "entry"},
+                {"key": "is_remote", "value": "true"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Salary Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/jobs/?salary_min=30000&salary_max=100000",
+              "query": [
+                {"key": "salary_min", "value": "30000"},
+                {"key": "salary_max", "value": "100000"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Job Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/jobs/1/"
+          }
+        },
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/jobs/categories/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employer",
+      "item": [
+        {
+          "name": "Employer Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/employer/dashboard/"
+          }
+        },
+        {
+          "name": "Post a Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/jobs/employer/jobs/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Backend Django Developer\",\n  \"company_name\": \"TechStartup Pvt Ltd\",\n  \"description\": \"We are looking for a skilled Django developer to build our REST APIs.\",\n  \"requirements\": \"2+ years of Django experience, PostgreSQL, REST APIs\",\n  \"responsibilities\": \"Build and maintain APIs, write tests, code reviews\",\n  \"benefits\": \"Remote work, flexible hours, health insurance\",\n  \"job_type\": \"full_time\",\n  \"experience_level\": \"mid\",\n  \"location\": \"Bangalore, India\",\n  \"is_remote\": true,\n  \"skills_required\": \"Python, Django, PostgreSQL, REST API, Docker\",\n  \"salary_min\": 50000,\n  \"salary_max\": 80000,\n  \"salary_currency\": \"INR\",\n  \"status\": \"active\",\n  \"deadline\": \"2026-12-31\"\n}"
+            }
+          }
+        },
+        {
+          "name": "My Posted Jobs",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/employer/jobs/"
+          }
+        },
+        {
+          "name": "Update Job",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/jobs/employer/jobs/1/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Senior Backend Developer\",\n  \"status\": \"active\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Job",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/employer/jobs/1/"
+          }
+        },
+        {
+          "name": "View Job Applications",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/employer/jobs/1/applications/"
+          }
+        },
+        {
+          "name": "Update Application Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/jobs/employer/applications/1/status/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"shortlisted\",\n  \"notes\": \"Strong profile, schedule interview\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Job Seeker",
+      "item": [
+        {
+          "name": "Job Seeker Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/dashboard/"
+          }
+        },
+        {
+          "name": "Apply for Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}
+            ],
+            "url": "{{BASE_URL}}/jobs/apply/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job\": 1,\n  \"cover_letter\": \"I am very excited about this opportunity. I have 2 years of Django experience and have built several production APIs.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "My Applications",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/my-applications/"
+          }
+        },
+        {
+          "name": "Withdraw Application",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/my-applications/1/withdraw/"
+          }
+        },
+        {
+          "name": "Save / Unsave a Job",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/1/save/"
+          }
+        },
+        {
+          "name": "My Saved Jobs",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}"}],
+            "url": "{{BASE_URL}}/jobs/saved/"
+          }
+        }
+      ]
+    }
+  ]
+}

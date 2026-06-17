@@ -1,0 +1,12 @@
+[
+  {"model": "jobs.category", "pk": 1, "fields": {"name": "Software Development", "slug": "software-development", "description": "Backend, frontend, full-stack, mobile development roles"}},
+  {"model": "jobs.category", "pk": 2, "fields": {"name": "Data Science & AI", "slug": "data-science-ai", "description": "Machine learning, data analysis, AI engineering"}},
+  {"model": "jobs.category", "pk": 3, "fields": {"name": "DevOps & Cloud", "slug": "devops-cloud", "description": "CI/CD, AWS, Azure, GCP, infrastructure roles"}},
+  {"model": "jobs.category", "pk": 4, "fields": {"name": "UI/UX Design", "slug": "ui-ux-design", "description": "Product design, user research, Figma"}},
+  {"model": "jobs.category", "pk": 5, "fields": {"name": "Product Management", "slug": "product-management", "description": "Product strategy, roadmaps, agile"}},
+  {"model": "jobs.category", "pk": 6, "fields": {"name": "Marketing & Growth", "slug": "marketing-growth", "description": "Digital marketing, SEO, growth hacking"}},
+  {"model": "jobs.category", "pk": 7, "fields": {"name": "Sales & Business Dev", "slug": "sales-business-dev", "description": "B2B sales, partnerships, account management"}},
+  {"model": "jobs.category", "pk": 8, "fields": {"name": "Finance & Accounting", "slug": "finance-accounting", "description": "CA, financial analysis, bookkeeping"}},
+  {"model": "jobs.category", "pk": 9, "fields": {"name": "Human Resources", "slug": "human-resources", "description": "Recruitment, HR operations, payroll"}},
+  {"model": "jobs.category", "pk": 10, "fields": {"name": "Cybersecurity", "slug": "cybersecurity", "description": "Penetration testing, SOC, security engineering"}}
+]
